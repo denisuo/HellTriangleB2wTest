@@ -4,11 +4,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-
 public class BibliotecaHellTriangle {
 	
 	public static int[][] converterArgEntrada (String argumentoEntrada) {
-		//remove os dpos primeiros e os dois ultimos colchetes
+		boolean isArtumentoEntradaValido = BibliotecaHellTriangle.validarArgumentoEntrada(argumentoEntrada);
+		
+		if(!isArtumentoEntradaValido){
+			throw new RuntimeException("Argumento de entrada não condiz com array de array de inteiros.");
+		}
+		
+		//remove os dois primeiros e os dois ultimos colchetes
 		argumentoEntrada = argumentoEntrada.substring(2, argumentoEntrada.length()-2).trim();
 		
 		//dá split por '],[' para gerar um novo array de string
@@ -39,24 +44,47 @@ public class BibliotecaHellTriangle {
 			}
 		}
 	
+		
+		boolean isTrianguloValido = validarLinhas(arPiramideInferno);
+		
+		if(!isTrianguloValido){
+			throw new RuntimeException("Formato do Triângulo inválido");
+		}
+		
 		return arPiramideInferno;
 	}
 	
+	
+	//verifica se o parametro passado está dentro de acordo de um array de array que contenha apenas numeros
 	public static boolean validarArgumentoEntrada (String pArgumentoEntrada){
+		String regexValidacaoArrayEntrada = "^\\[{2}(\\d+)(,\\d+)*(\\],\\[(\\d+)(,\\d+)*)*\\]{2}$";
 		boolean retornoValidacaoRegex = false;
 		
 		if(pArgumentoEntrada != null && !pArgumentoEntrada.trim().equals("")){
-			//verifica se o parametro passado está dentro de acordo de um array de array que contenha apenas numeros
-			Pattern regexValidacao = Pattern.compile("^\\[{2}(\\d+)(,\\d+)*(\\],\\[(\\d+)(,\\d+)*)*\\]{2}$");
-			Matcher testeRetorno = regexValidacao.matcher(pArgumentoEntrada);
-			retornoValidacaoRegex = testeRetorno.matches();
+			Pattern p = Pattern.compile(regexValidacaoArrayEntrada);
+			Matcher m = p.matcher(pArgumentoEntrada);
+			//retorna o resultado do teste regex
+			retornoValidacaoRegex = m.matches();
 		}
 		
 		return retornoValidacaoRegex;
 	}
-	
-	public static int calcularPossibilidadesPossiveis (int pQtdLinhasTriangulo){
-		return (int) Math.pow(2, pQtdLinhasTriangulo-1);
+
+
+	public static boolean validarLinhas(int[][] pArHellTriangle) {
+		
+		//o triangulo deve ter ao menos duas linhas
+		if(pArHellTriangle.length < 2){
+			return false;
+		}
+		
+		//verifica se a quantidade de colunas em cada linha é maior que a anterior + 1
+		for(int linhaAtual = 0; linhaAtual<pArHellTriangle.length; linhaAtual++){
+			if(pArHellTriangle[linhaAtual] == null || pArHellTriangle[linhaAtual].length != linhaAtual+1)
+				return false;
+		}
+		
+		return true;
 	}
 
 }
