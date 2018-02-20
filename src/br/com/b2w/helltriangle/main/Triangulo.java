@@ -10,10 +10,11 @@ public class Triangulo {
 	}
 
 	public int getMaiorSoma(){
-		return getValor(0, 0);
+		//inicia a busca na arvore começando na posicao 0,0
+		return getMaiorValorArvore(0, 0);
 	}
 	
-	private int getValor(int linha, int coluna) {
+	private int getMaiorValorArvore(int linha, int coluna) {
 		int valorArvoreEsq = 0;
 		int valorArvoreDir = 0;
 		
@@ -22,10 +23,10 @@ public class Triangulo {
 		
 		int proximaLinhaTriangulo = linha + 1;
 		if(qtdLinhasTriangulo !=  proximaLinhaTriangulo){
-			valorArvoreEsq = getValor(proximaLinhaTriangulo, coluna); // esquerda
+			valorArvoreEsq = getMaiorValorArvore(proximaLinhaTriangulo, coluna); // esquerda
 
 			int proximaColuna = coluna + 1;
-			valorArvoreDir = getValor(proximaLinhaTriangulo, proximaColuna); // direita
+			valorArvoreDir = getMaiorValorArvore(proximaLinhaTriangulo, proximaColuna); // direita
 		}
 		
 		int retornoSoma = valorNoAtual + ((valorArvoreEsq > valorArvoreDir) ? valorArvoreEsq : valorArvoreDir);
